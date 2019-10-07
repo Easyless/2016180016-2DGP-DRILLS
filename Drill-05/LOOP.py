@@ -55,6 +55,7 @@ while running:
                 t = i / 100
                 Character_x = (1-t)*start_x+t*next_x
                 Character_x = (1-t)*start_y+t*next_y
+                delay(0.01)
         Move = False
 
     elif Character_Dir == 1:
@@ -64,6 +65,7 @@ while running:
                 t = i / 100
                 Character_x = (1-t)*start_x+t*next_x
                 Character_x = (1-t)*start_y+t*next_y
+                delay(0.01)
         Move = False
 
 
@@ -71,7 +73,6 @@ while running:
     Cursor.draw(Cursor_x, Cursor_y)
     update_canvas()
     frame = (frame + 1) % 8
-    delay(0.01)
     handle_events()
 
 close_canvas()
