@@ -4,7 +4,7 @@ KPU_WIDTH, KPU_HEIGHT = 1280, 1024
 
 
 def handle_events():
-    global running
+    global running, Move
     global Cursor_x, Cursor_y
     global Character_x, Character_y
     global next_x, next_y
@@ -25,10 +25,9 @@ def handle_events():
                 Character_Dir = 1
             start_x = Character_x
             start_y = Character_y
-            for i in range(0, 100 + 1, 2):
-                t = i / 100
-                Character_x = (1 - t) * start_x + t * event.x
-                Character_y = (1 - t) * start_y + t * event.y
+            next_x = event.x
+            next_y = event.y
+            Move = True
 
         pass
 
@@ -44,14 +43,29 @@ Character_x, Character_y = KPU_WIDTH // 2, KPU_HEIGHT // 2
 frame = 0
 hide_cursor()
 Character_Dir = 0 # 0 이면 left, 1이면 right
+Move = False
 while running:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
 
     if Character_Dir == 0:
         character.clip_draw(frame * 100, 100, 100, 100, Character_x, Character_y)
+        if Move == True:
+            for i in range(0, 100 + 1, 2):
+                t = i / 100
+                Character_x = (1-t)*start_x+t*next_x
+                Character_x = (1-t)*start_y+t*next_y
+        Move = False
+
     elif Character_Dir == 1:
         character.clip_draw(frame * 100, 0, 100, 100, Character_x, Character_y)
+        if Move == True:
+            for i in range(0, 100 + 1, 2):
+                t = i / 100
+                Character_x = (1-t)*start_x+t*next_x
+                Character_x = (1-t)*start_y+t*next_y
+        Move = False
+
 
 
     Cursor.draw(Cursor_x, Cursor_y)
