@@ -19,7 +19,6 @@ def handle_events():
         elif event.type == SDL_MOUSEBUTTONDOWN:
             next_x = event.x
             next_y = event.y
-
     pass
 
 
@@ -37,6 +36,10 @@ hide_cursor()
 while running:
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
+    if Character_x < Cursor_x:
+        character.clip_draw(frame * 100, 100, 100, 100, Character_x, Character_y)
+    elif Character_x > Cursor_x:
+        character.clip_draw(frame * 100, 0, 100, 100, Character_x, Character_y)
     Cursor.draw(Cursor_x, Cursor_y)
     update_canvas()
     frame = (frame + 1) % 8
