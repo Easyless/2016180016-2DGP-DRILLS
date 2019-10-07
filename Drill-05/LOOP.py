@@ -45,6 +45,7 @@ hide_cursor()
 Character_Dir = 0 # 0 이면 left, 1이면 right
 Move = False
 while running:
+
     clear_canvas()
     kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
 
@@ -55,6 +56,7 @@ while running:
                 t = i / 100
                 Character_x = (1-t)*start_x+t*next_x
                 Character_x = (1-t)*start_y+t*next_y
+                update_canvas()
         Move = False
 
     elif Character_Dir == 1:
@@ -64,12 +66,13 @@ while running:
                 t = i / 100
                 Character_x = (1-t)*start_x+t*next_x
                 Character_x = (1-t)*start_y+t*next_y
+                update_canvas()
         Move = False
 
 
 
     Cursor.draw(Cursor_x, Cursor_y)
-    update_canvas()
+
     frame = (frame + 1) % 8
     delay(0.01)
     handle_events()
