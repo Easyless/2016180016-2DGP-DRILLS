@@ -39,10 +39,12 @@ while running:
 
     # draw p2-p3
     for i in range(0, 100, 2):
+        clear_canvas()
+        kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
         t = i / 100
-        x = ((-t ** 3 + 2 * t ** 2 - t) * x_points[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * x_points[1] + (
+        Character_x = ((-t ** 3 + 2 * t ** 2 - t) * x_points[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * x_points[1] + (
                 -3 * t ** 3 + 4 * t ** 2 + t) * x_points[2] + (t ** 3 - t ** 2) * x_points[3]) / 2
-        y = ((-t ** 3 + 2 * t ** 2 - t) * y_points[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * y_points[1] + (
+        Character_y = ((-t ** 3 + 2 * t ** 2 - t) * y_points[0] + (3 * t ** 3 - 5 * t ** 2 + 2) * y_points[1] + (
                 -3 * t ** 3 + 4 * t ** 2 + t) * y_points[2] + (t ** 3 - t ** 2) * y_points[3]) / 2
         if Character_Dir == 1:
             character.clip_draw(frame * 100, 100, 100, 100, Character_x, Character_y)
@@ -52,15 +54,32 @@ while running:
         update_canvas()
         handle_events()
     for i in range(0, 100, 2):
+        clear_canvas()
+        kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
         t = i / 100
-        x = ((-t ** 3 + 2 * t ** 2 - t) * x_points[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * x_points[2] + (
+        Character_x = ((-t ** 3 + 2 * t ** 2 - t) * x_points[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * x_points[2] + (
                 -3 * t ** 3 + 4 * t ** 2 + t) * x_points[3] + (t ** 3 - t ** 2) * x_points[4]) / 2
-        y = ((-t ** 3 + 2 * t ** 2 - t) * y_points[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * y_points[2] + (
+        Character_y = ((-t ** 3 + 2 * t ** 2 - t) * y_points[1] + (3 * t ** 3 - 5 * t ** 2 + 2) * y_points[2] + (
                 -3 * t ** 3 + 4 * t ** 2 + t) * y_points[3] + (t ** 3 - t ** 2) * y_points[4]) / 2
         if Character_Dir == 1:
             character.clip_draw(frame * 100, 100, 100, 100, Character_x, Character_y)
         elif Character_Dir == 0:
-            character.clip_draw(frame * 100, 0, 100, 100, Character_x, Character_y )
+            character.clip_draw(frame * 100, 0, 100, 100, Character_x, Character_y)
+        frame = (frame + 1) % 8
+        update_canvas()
+        handle_events()
+    for i in range(0, 100, 2):
+        clear_canvas()
+        kpu_ground.draw(KPU_WIDTH // 2, KPU_HEIGHT // 2)
+        t = i / 100
+        Character_x = ((-t ** 3 + 2 * t ** 2 - t) * x_points[2] + (3 * t ** 3 - 5 * t ** 2 + 2) * x_points[3] + (
+                -3 * t ** 3 + 4 * t ** 2 + t) * x_points[4] + (t ** 3 - t ** 2) * x_points[5]) / 2
+        Character_y = ((-t ** 3 + 2 * t ** 2 - t) * y_points[2] + (3 * t ** 3 - 5 * t ** 2 + 2) * y_points[3] + (
+                -3 * t ** 3 + 4 * t ** 2 + t) * y_points[4] + (t ** 3 - t ** 2) * y_points[5]) / 2
+        if Character_Dir == 1:
+            character.clip_draw(frame * 100, 100, 100, 100, Character_x, Character_y)
+        elif Character_Dir == 0:
+            character.clip_draw(frame * 100, 0, 100, 100, Character_x, Character_y)
         frame = (frame + 1) % 8
         update_canvas()
         handle_events()
