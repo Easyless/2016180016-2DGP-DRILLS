@@ -28,6 +28,28 @@ class Boy:
     pass
 
 
+class Ball:
+
+    def __init__(self):
+        self.x = random.randint(100, 700)
+        self.y = 599
+        self.type = random.randint(0, 1)
+        self.speed = random.randint(5,15)
+        self.smallimage = load_image('ball21x21.png')
+        self.bigimage = load_image('ball41x41.png')
+
+    def drop(self):
+        if self.y > 90 - (21 + (self.type * 20)):
+            self.y -= self.speed
+
+    def draw(self):
+        if self.type == 0:
+            self.smallimage.draw(self.x, self.y, 21, 21)
+        elif self.type == 1:
+            self.bigimage.draw(self.x, self.y, 41, 41)
+    pass
+
+
 def handle_events():
     global running
     events = get_events()
@@ -41,6 +63,7 @@ def handle_events():
 open_canvas()
 
 team = [Boy() for i in range(11)]
+balls = [Ball() for i in range(20)]
 grass = Grass()
 
 running = True
@@ -49,10 +72,15 @@ while running:
     handle_events()
     for boy in team:
         boy.update()
+    for ball in balls:
+        ball.drop()
+
     clear_canvas()
     grass.draw()
     for boy in team:
         boy.draw()
+    for ball in balls:
+        ball.draw()
     update_canvas()
 
     delay(0.05)
