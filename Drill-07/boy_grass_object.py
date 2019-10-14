@@ -1,6 +1,7 @@
 from pico2d import *
 import random
 
+
 class Grass:
     def __init__(self):
         self.image = load_image('grass.png')
@@ -13,9 +14,9 @@ class Grass:
 
 class Boy:
     def __init__(self):
-        self.x = random.randint(100,700)
+        self.x = random.randint(100, 700)
         self.y = 90
-        self.frame = random.randint(0,7)
+        self.frame = random.randint(0, 7)
         self.image = load_image('run_animation.png')
 
     def update(self):
@@ -34,19 +35,30 @@ class Ball:
         self.x = random.randint(100, 700)
         self.y = 599
         self.type = random.randint(0, 1)
-        self.speed = random.randint(5,15)
+        self.speed = random.randint(5, 15)
         self.smallimage = load_image('ball21x21.png')
         self.bigimage = load_image('ball41x41.png')
 
     def drop(self):
-        if self.y > 90 - (21 + (self.type * 20)):
-            self.y -= self.speed
+        if self.type == 1:
+            if self.y > 70:
+                if self.y - self.speed > 70:
+                    self.y -= self.speed
+                else:
+                    self.y -= (self.y - 70)
+        elif self.type == 0:
+            if self.y > 60:
+                if self.y - self.speed > 60:
+                    self.y -= self.speed
+                else:
+                    self.y -= (self.y - 60)
 
     def draw(self):
         if self.type == 0:
             self.smallimage.draw(self.x, self.y, 21, 21)
         elif self.type == 1:
             self.bigimage.draw(self.x, self.y, 41, 41)
+
     pass
 
 
