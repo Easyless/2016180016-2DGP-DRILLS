@@ -5,7 +5,7 @@ from pico2d import *
 
 name = "PauseState"
 image = None
-
+timer = 0
 
 def enter():
     global image
@@ -33,10 +33,14 @@ def handle_events():
 
 
 def draw():
+    global timer
     clear_canvas()
     main_state.grass.draw()
     main_state.boy.draw()
-    image.draw(400,300)
+    if timer % 100 < 50:
+        image.draw(400,300)
+    delay(0.01)
+    timer += 1
     update_canvas()
     pass
 
