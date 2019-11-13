@@ -16,20 +16,6 @@ TIME_PER_ACTION = 1.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 14
 
-# Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SPACE = range(6)
-
-key_event_table = {
-    (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
-    (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
-    (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE
-}
-
-
-# Boy States
-
 class RunState:
 
     @staticmethod
@@ -60,10 +46,6 @@ class RunState:
             boy.image.clip_composite_draw((int(boy.frame) % 5) * 182, (int((15 - boy.frame) / 5)) * 167, 182, 167, 0,
                                           'h', boy.x, boy.y, 182, 167)
 
-
-next_state_table = {
-    RunState: {},
-}
 
 
 class Boy:
