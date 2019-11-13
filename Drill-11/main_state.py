@@ -86,6 +86,12 @@ def update():
                 ball.stop()
             ball.x += brick.direction * 200 * game_framework.frame_time
             ball.x = clamp(25, ball.x, 1600 - 25)
+    if collide(boy, brick):
+        if brick.y + 20 < boy.y - 15:
+            boy.fall_speed = 0
+    else:
+        boy.fall_speed = 800
+
 
 
 def draw():
