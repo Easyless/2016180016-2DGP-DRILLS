@@ -48,6 +48,9 @@ class IdleState:
 
     @staticmethod
     def exit(boy, event):
+        if event == SPACE:
+            if boy.JumpTimer == 0:
+                boy.JumpTimer = 100;
         pass
 
     @staticmethod
@@ -81,6 +84,9 @@ class RunState:
 
     @staticmethod
     def exit(boy, event):
+        if event == SPACE:
+            if boy.JumpTimer == 0:
+                boy.JumpTimer = 100;
         pass
 
     @staticmethod
@@ -143,6 +149,7 @@ class Boy:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.JumpTimer = 0
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
@@ -158,6 +165,11 @@ class Boy:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+        if self.JumpTimer > 0:
+            self.y += 800 * game_framework.frame_time
+            self.JumpTimer -= 1;
+        if self.y > 90:
+            self.y -= 400 * game_framework.frame_time
 
     def draw(self):
         self.cur_state.draw(self)
