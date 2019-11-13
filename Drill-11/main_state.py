@@ -89,6 +89,8 @@ def update():
     if collide(boy, brick):
         if brick.y + 20 < boy.y - 15:
             boy.fall_speed = 0
+        boy.x += brick.direction * 200 * game_framework.frame_time
+        boy.x = clamp(25, boy.x, 1600 - 25)
     else:
         boy.fall_speed = 800
 
