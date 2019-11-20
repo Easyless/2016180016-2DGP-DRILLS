@@ -72,14 +72,20 @@ class Zombie:
             if self.HP > boy.HP:
                 self.dir = math.atan2(boy.y - self.y, boy.x - self.x)
             else:
-                self.dir = -math.atan2(boy.y - self.y, boy.x - self.x)
+                self.dir = math.atan2(-(boy.y - self.y), -(boy.x - self.x))
             return BehaviorTree.SUCCESS
         else:
             self.speed = 0
             return BehaviorTree.FAIL
         pass
 
-    def find_ball(self):
+    def move_to_player(self):
+        self.speed = RUN_SPEED_PPS
+        self.calculate_current_position()
+        return BehaviorTree.SUCCESS
+        pass
+
+    def find_balls(self):
         balls = main_state.get_balls()
 
         for ball in balls:
@@ -90,12 +96,6 @@ class Zombie:
             else:
                 self.speed = 0
                 return BehaviorTree.FAIL
-        pass
-
-    def move_to_player(self):
-        self.speed = RUN_SPEED_PPS
-        self.calculate_current_position()
-        return BehaviorTree.SUCCESS
         pass
 
     def move_to_ball(self):
@@ -126,14 +126,14 @@ class Zombie:
         wander_node = LeafNode("Wander", self.wander)
         find_player_node = LeafNode("Find Player", self.find_player)
         move_to_player_node = LeafNode("Move to Player", self.move_to_player)
-        find_ball_node = LeafNode("Find Player", self.find_ball)
-        move_to_ball_node = LeafNode("Move to Player", self.move_to_ball)
+        find_ball_node = LeafNode("Find Ball", self.find_balls)
+        move_to_ball_node = LeafNode("Move to Ball", self.move_to_ball)
         chase_node = SequenceNode("Chase")
         chase_node.add_children(find_player_node, move_to_player_node)
         chase_ball_node = SequenceNode("Chase ball")
         chase_node.add_children(find_ball_node, move_to_ball_node)
         wander_chase_node = SelectorNode("WanderChase")
-        wander_chase_node.add_children(chase_node, chase_ball_node, wander_node)
+        wander_chase_node.add_children(chase_node, wander_node)
         self.bt = BehaviorTree(wander_chase_node)
         pass
 
