@@ -19,7 +19,7 @@ FRAMES_PER_ACTION = 10
 
 animation_names = ['Attack', 'Dead', 'Idle', 'Walk']
 
-
+#
 class Zombie:
     images = None
 
