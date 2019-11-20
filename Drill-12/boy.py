@@ -114,7 +114,7 @@ class Boy:
         self.event_que = []
         self.cur_state = WalkingState
         self.cur_state.enter(self, None)
-        self.HP = 120
+        self.HP = 90
 
 
     def get_bb(self):

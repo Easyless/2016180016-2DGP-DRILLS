@@ -13,7 +13,7 @@ class Ball:
             self.image = load_image("ball21x21.png")
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
 
     def update(self):
         pass

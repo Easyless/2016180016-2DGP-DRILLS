@@ -7,7 +7,7 @@ import main_state
 
 # zombie Run Speed
 PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_KMPH = 15.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -31,14 +31,10 @@ class Zombie:
                                        range(1, 11)]
 
     def __init__(self):
-        positions = [(43, 750), (1118, 750), (1050, 530), (575, 220), (235, 33), (575, 220), (1050, 530), (1118, 750)]
-        self.patrol_positions = []
-        for p in positions:
-            self.patrol_positions.append((p[0], 1024 - p[1]))
-        self.patrol_order = 1
         self.target_x, self.target_y = None, None
-        self.x, self.y = self.patrol_positions[0]
-
+        self.x = random.randint(50, 1280 - 50)
+        self.y = random.randint(50, 1024 - 50)
+        self.font = load_font('ENCR10B.TTF', 16)
         self.load_images()
         self.HP = 100
         self.dir = random.random() * 2 * math.pi  # random moving direction
@@ -52,7 +48,7 @@ class Zombie:
         self.x += self.speed * math.cos(self.dir) * game_framework.frame_time
         self.y += self.speed * math.sin(self.dir) * game_framework.frame_time
         self.x = clamp(50, self.x, 1280 - 50)
-        self.y = clamp(50, self.y, 1024 - 50)
+        self.y = clamp(200, self.y, 1024 - 50)
 
     def wander(self):
         self.speed = RUN_SPEED_PPS
@@ -87,7 +83,6 @@ class Zombie:
 
     def find_balls(self):
         balls = main_state.get_balls()
-
         for ball in balls:
             distance = (ball.x - self.x) ** 2 + (ball.y - self.y) ** 2
             if distance < (PIXEL_PER_METER * 5) ** 2:
@@ -104,24 +99,6 @@ class Zombie:
         return BehaviorTree.SUCCESS
         pass
 
-    def get_next_position(self):
-        self.target_x, self.target_y = \
-            self.patrol_positions[self.patrol_order % len(self.patrol_positions)]
-        self.patrol_order += 1
-        self.dir = math.atan2(self.target_y - self.y, self.target_x - self.x)
-        return BehaviorTree.SUCCESS
-        pass
-
-    def move_to_target(self):
-        self.speed = RUN_SPEED_PPS
-        self.calculate_current_position()
-        distance = (self.target_x - self.x) ** 2 + (self.target_y - self.y) ** 2
-        if distance < PIXEL_PER_METER ** 2:
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.RUNNING
-        pass
-
     def build_behavior_tree(self):
         wander_node = LeafNode("Wander", self.wander)
         find_player_node = LeafNode("Find Player", self.find_player)
@@ -131,9 +108,11 @@ class Zombie:
         chase_node = SequenceNode("Chase")
         chase_node.add_children(find_player_node, move_to_player_node)
         chase_ball_node = SequenceNode("Chase ball")
-        chase_node.add_children(find_ball_node, move_to_ball_node)
+        chase_ball_node.add_children(find_ball_node, move_to_ball_node)
         wander_chase_node = SelectorNode("WanderChase")
-        wander_chase_node.add_children(chase_node, wander_node)
+        wander_chase_node.add_child(chase_node)
+        wander_chase_node.add_child(chase_ball_node)
+        wander_chase_node.add_child(wander_node)
         self.bt = BehaviorTree(wander_chase_node)
         pass
 
@@ -155,6 +134,7 @@ class Zombie:
                 Zombie.images['Idle'][int(self.frame)].draw(self.x, self.y, 100, 100)
             else:
                 Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, 100, 100)
-
+        draw_rectangle(*self.get_bb())
+        self.font.draw(self.x - 60, self.y + 50, '(HP: %3.2f)' % self.HP, (255, 255, 0))
     def handle_event(self, event):
         pass

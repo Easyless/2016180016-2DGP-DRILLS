@@ -28,7 +28,16 @@ def collide(a, b):
 
     return True
 
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
 
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 
 def get_boy():
     return boy
@@ -77,7 +86,21 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-
+    for ball in balls:
+        if collide(boy, ball):
+            boy.HP += 100
+            balls.remove(ball)
+            game_world.remove_object(ball)
+    for ball in balls:
+        if collide(zombie, ball):
+            zombie.HP += 100
+            balls.remove(ball)
+            game_world.remove_object(ball)
+    if collide(zombie, boy):
+        if zombie.HP > boy.HP:
+            close_canvas()
+        else:
+            game_world.remove_object(zombie)
 
 def draw():
     clear_canvas()
