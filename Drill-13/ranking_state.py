@@ -10,11 +10,10 @@ import boy
 
 import world_build_state
 
-name = "MainState"
+name = "ranking_State"
 
 
 def collide(a, b):
-    # fill here
     left_a, bottom_a, right_a, top_a = a.get_bb()
     left_b, bottom_b, right_b, top_b = b.get_bb()
 
@@ -25,30 +24,43 @@ def collide(a, b):
 
     return True
 
+
 zombie = None
 boy = None
 font = None
 score = None
-ranks = {"#1": 1.0, "#2": 1.0, "#3": 1.0, "#4": 1.0,
-         "#5": 1.0, "#6": 1.0, "#7": 1.0, "#8": 1.0,
-         "#9": 1.0, "#10": 1.0}
+data = []
+
+
+def load_data():
+    global data, score
+
+    with open('temp.json', 'r') as f:
+        data = json.load(f)
+    data.append(score)
+    data.sort(reverse=True)
+
+
+def save_data():
+    global data
+    del data[-1]
+    with open('temp.json', 'w') as f:
+        json.dump(data, f)
+
+
 def enter():
-    global boy
-    global font, score, ranks
+    global boy, font, score, data
+
     boy = world_build_state.get_boy()
     font = load_font('ENCR10B.TTF', 20)
-
     score = get_time() - boy.start_time
-    with open('ranks.json', 'w') as f:
-        json.dumps(ranks, f)
-
-
-
-
-    pass
+    load_data()
+    print(data)
+    save_data()
 
 def exit():
     game_world.clear()
+
 
 def pause():
     pass
@@ -72,14 +84,12 @@ def update():
 
 
 def draw():
-    global boy
-    global font, score
+    global boy, font, score
     clear_canvas()
-    font.draw(600, 500, 'Score: %3.2f' % score, (0, 0, 0))
+    font.draw(600, 800, 'Ranking')
+    counter = 9
+    while counter != -1:
+        font.draw(600, 700 - counter * 30, '#' + str(counter) + ': ' + str(data[counter]), (0, 0, 0))
+        counter -= 1
+
     update_canvas()
-
-
-
-
-
-
