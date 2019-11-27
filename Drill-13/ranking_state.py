@@ -6,6 +6,7 @@ import os
 from pico2d import *
 import game_framework
 import game_world
+import boy
 
 import world_build_state
 
@@ -26,11 +27,18 @@ def collide(a, b):
 
 zombie = None
 boy = None
-
+font = None
+score = None
+ranks = None
 def enter():
-    # game world is prepared already in world_build_state
     global boy
+    global font, score, ranks
     boy = world_build_state.get_boy()
+    font = load_font('ENCR10B.TTF', 20)
+    score = get_time() - boy.start_time
+    with open('ranks.json', 'r') as f:
+        ranks = json.load(f)
+
     pass
 
 def exit():
@@ -54,15 +62,14 @@ def handle_events():
 
 
 def update():
-    for game_object in game_world.all_objects():
-        game_object.update()
-
+    pass
 
 
 def draw():
+    global boy
+    global font, score
     clear_canvas()
-    for game_object in game_world.all_objects():
-        game_object.draw()
+    font.draw(600, 500, 'Score: %3.2f' % score, (0, 0, 0))
     update_canvas()
 
 
