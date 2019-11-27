@@ -29,15 +29,21 @@ zombie = None
 boy = None
 font = None
 score = None
-ranks = None
+ranks = {"#1": 1.0, "#2": 1.0, "#3": 1.0, "#4": 1.0,
+         "#5": 1.0, "#6": 1.0, "#7": 1.0, "#8": 1.0,
+         "#9": 1.0, "#10": 1.0}
 def enter():
     global boy
     global font, score, ranks
     boy = world_build_state.get_boy()
     font = load_font('ENCR10B.TTF', 20)
+
     score = get_time() - boy.start_time
-    with open('ranks.json', 'r') as f:
-        ranks = json.load(f)
+    with open('ranks.json', 'w') as f:
+        json.dumps(ranks, f)
+
+
+
 
     pass
 
